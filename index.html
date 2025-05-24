@@ -1,0 +1,3000 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Konten Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --white: #ffffff;
+            --permanent: #2ecc71;
+            --epic: #9b59b6;
+            --card-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.18);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+            background-image: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        }
+
+        .premium-content-system {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Kotak Login */
+        .overlay-box {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .overlay-box.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .box-konten {
+            background-color: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--card-shadow);
+            transform: translateY(20px);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .overlay-box.active .box-konten {
+            transform: translateY(0);
+        }
+
+        .judul-box {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .deks-box {
+            color: var(--gray);
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        #emailInput {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        #emailInput:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            font-weight: 500;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-close:hover {
+            color: var(--danger);
+        }
+
+        /* Konten Premium */
+        .konten-premium {
+            display: none;
+            margin-top: 2rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .content-header h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .content-header p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .download-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .download-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            border-top: 4px solid;
+            position: relative;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .download-card .card-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .download-card.subscriber {
+            border-color: var(--warning);
+        }
+
+        .download-card.premium {
+            border-color: var(--info);
+        }
+
+        .download-card.legend {
+            border-color: var(--danger);
+        }
+
+        .download-card.epic {
+            border-color: var(--epic);
+        }
+
+        .permanent-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--permanent);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .dev-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--warning);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .card-icon.subscriber {
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+        }
+
+        .card-icon.premium {
+            background: linear-gradient(135deg, #4361ee, #4895ef);
+        }
+
+        .card-icon.legend {
+            background: linear-gradient(135deg, #f72585, #b5179e);
+        }
+
+        .card-icon.epic {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .card-description {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-download {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-download i {
+            margin-right: 0.5rem;
+        }
+
+        .btn-download.subscriber {
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+        }
+
+        .btn-download.premium {
+            background: linear-gradient(135deg, #4361ee, #4895ef);
+        }
+
+        .btn-download.legend {
+            background: linear-gradient(135deg, #f72585, #b5179e);
+        }
+
+        .btn-download.epic {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+
+        .btn-download:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .verification-box {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .verification-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+        }
+
+        .limit-info {
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .limit-count {
+            font-weight: 600;
+        }
+
+        .limit-count.zero {
+            color: var(--danger);
+        }
+
+        .limit-count.warning {
+            color: var(--warning);
+        }
+
+        .reset-clock {
+            font-family: 'Courier New', monospace;
+            background: #2c3e50;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .reset-info-btn {
+            background: none;
+            border: none;
+            color: var(--info);
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .reset-info-btn i {
+            margin-right: 0.3rem;
+        }
+
+        /* Kontak Admin */
+        .admin-contact {
+            margin-top: 3rem;
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 10px;
+        }
+
+        .contact-options {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            margin: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .contact-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .contact-btn i {
+            margin-right: 0.5rem;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+        }
+
+        .email-btn {
+            background: #D44638;
+        }
+
+        .email-btn:hover {
+            background: #B23121;
+        }
+
+        /* Popup Styles */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .popup-container {
+            background: var(--white);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 450px;
+            padding: 2rem;
+            box-shadow: var(--card-shadow);
+            transform: translateY(20px);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .popup-overlay.active .popup-container {
+            transform: translateY(0);
+        }
+
+        .popup-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, var(--primary), var(--info));
+        }
+
+        .popup-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .popup-content {
+            margin-bottom: 2rem;
+        }
+
+        .options-list {
+            margin: 1.5rem 0;
+        }
+
+        .option-btn {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            background: var(--light);
+            border: none;
+            border-radius: 10px;
+            text-align: left;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option-btn:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
+        }
+
+        .option-btn i {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .option-info {
+            flex: 1;
+            margin-left: 1rem;
+        }
+
+        .option-name {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .option-desc {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 0.2rem;
+        }
+
+        .option-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-right: 1rem;
+        }
+
+        .popup-footer {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        .btn-cancel {
+            background: var(--light);
+            color: var(--gray);
+        }
+
+        .btn-cancel:hover {
+            background: #e9ecef;
+        }
+
+        /* Popup Iklan */
+        .ads-video-container {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #3a0ca3, #4361ee);
+            border-radius: 10px;
+            margin: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
+        }
+
+        .ads-timer {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .ads-reward-message {
+            display: none;
+            padding: 0.8rem;
+            background: #e8f5e9;
+            border-radius: 8px;
+            margin-top: 1rem;
+            color: #2e7d32;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        /* Modern User Profile */
+        .user-profile {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .profile-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--info));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-right: 10px;
+            border: 2px solid white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: var(--transition);
+        }
+
+        .user-profile:hover .profile-avatar {
+            transform: scale(1.1);
+        }
+
+        .profile-name {
+            font-weight: 500;
+            color: var(--dark);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .profile-menu {
+            position: absolute;
+            top: 70px;
+            right: 0;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            width: 320px;
+            overflow: hidden;
+            display: none;
+            z-index: 1000;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .profile-menu.active {
+            display: block;
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .profile-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--info));
+            color: white;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .profile-header-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: white;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-right: 1rem;
+            border: 3px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .profile-header-info {
+            flex: 1;
+        }
+
+        .profile-header-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .profile-header-email {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-tier {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .tier-subscriber {
+            background: linear-gradient(135deg, rgba(255, 179, 71, 0.9), rgba(255, 204, 51, 0.9));
+        }
+
+        .tier-premium {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.9), rgba(72, 149, 239, 0.9));
+        }
+
+        .tier-legend {
+            background: linear-gradient(135deg, rgba(247, 37, 133, 0.9), rgba(181, 23, 158, 0.9));
+        }
+
+        .tier-epic {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.9), rgba(142, 68, 173, 0.9));
+        }
+
+        .profile-details {
+            padding: 1rem 0;
+        }
+
+        .profile-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .profile-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--primary);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .profile-item:hover {
+            background: rgba(67, 97, 238, 0.05);
+        }
+
+        .profile-item:hover::before {
+            opacity: 1;
+        }
+
+        .profile-item i {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--primary);
+            background: rgba(67, 97, 238, 0.1);
+            font-size: 0.9rem;
+        }
+
+        .profile-item-text {
+            flex: 1;
+        }
+
+        .profile-item-title {
+            font-weight: 500;
+            color: var(--dark);
+            font-size: 0.9rem;
+        }
+
+        .profile-item-subtitle {
+            font-size: 0.75rem;
+            color: var(--gray);
+            margin-top: 0.2rem;
+        }
+
+        .profile-divider {
+            height: 1px;
+            background: rgba(0,0,0,0.05);
+            margin: 0.5rem 1.5rem;
+        }
+
+        /* Popup Update */
+        .update-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            width: 300px;
+            z-index: 1000;
+            transform: translateX(120%);
+            transition: var(--transition);
+        }
+
+        .update-popup.active {
+            transform: translateX(0);
+        }
+
+        .update-header {
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--info));
+            color: white;
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .update-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+
+        .update-close:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+
+        .update-content {
+            padding: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .update-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .update-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .update-title {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--primary);
+            font-size: 0.95rem;
+        }
+
+        .update-date {
+            font-size: 0.7rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .update-date i {
+            margin-right: 0.3rem;
+            font-size: 0.6rem;
+        }
+
+        .update-text {
+            font-size: 0.85rem;
+            color: var(--dark);
+            line-height: 1.5;
+        }
+
+        /* Popup Info Reset */
+        .reset-info-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .reset-info-popup.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .reset-info-header {
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--info));
+            color: white;
+            border-radius: 16px 16px 0 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .reset-info-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+
+        .reset-info-header h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .reset-info-header p {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .reset-info-content {
+            padding: 1.5rem;
+        }
+
+        .reset-tier {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            background: #f8f9fa;
+            transition: var(--transition);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .reset-tier:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .reset-tier-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .reset-tier-icon.subscriber {
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+        }
+
+        .reset-tier-icon.premium {
+            background: linear-gradient(135deg, #4361ee, #4895ef);
+        }
+
+        .reset-tier-icon.legend {
+            background: linear-gradient(135deg, #f72585, #b5179e);
+        }
+
+        .reset-tier-icon.epic {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+
+        .reset-tier-info {
+            flex: 1;
+        }
+
+        .reset-tier-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .reset-tier-time {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .reset-tier-countdown {
+            font-family: 'Courier New', monospace;
+            background: #2c3e50;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .reset-info-footer {
+            padding: 1rem;
+            text-align: center;
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* Tutorial Section */
+        .tutorial-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            box-shadow: var(--card-shadow);
+        }
+
+        .tutorial-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .tutorial-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--info));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .tutorial-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .tutorial-steps {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .tutorial-step {
+            display: flex;
+            align-items: flex-start;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .tutorial-step:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-title {
+            font-weight: 500;
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        .step-description {
+            font-size: 0.85rem;
+            color: var(--gray);
+            line-height: 1.5;
+        }
+
+        .code-example {
+            background: #2c3e50;
+            color: white;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .code-example span {
+            color: #4cc9f0;
+        }
+
+        /* Download Queue */
+        .queue-container {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 300px;
+            z-index: 900;
+            transform: translateY(120%);
+            transition: var(--transition);
+        }
+
+        .queue-container.active {
+            transform: translateY(0);
+        }
+
+        .queue-header {
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--info));
+            color: white;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .queue-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .queue-title i {
+            margin-right: 0.5rem;
+        }
+
+        .queue-count {
+            background: rgba(255,255,255,0.2);
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .queue-content {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 0.5rem;
+        }
+
+        .queue-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .queue-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .queue-item-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.8rem;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .queue-item-icon.subscriber {
+            background: linear-gradient(135deg, #ffb347, #ffcc33);
+        }
+
+        .queue-item-icon.premium {
+            background: linear-gradient(135deg, #4361ee, #4895ef);
+        }
+
+        .queue-item-icon.legend {
+            background: linear-gradient(135deg, #f72585, #b5179e);
+        }
+
+        .queue-item-icon.epic {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+
+        .queue-item-info {
+            flex: 1;
+        }
+
+        .queue-item-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .queue-item-status {
+            font-size: 0.75rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+        }
+
+        .queue-item-status i {
+            margin-right: 0.3rem;
+            font-size: 0.6rem;
+        }
+
+        .queue-item-status.pending {
+            color: var(--warning);
+        }
+
+        .queue-item-status.downloading {
+            color: var(--info);
+        }
+
+        .queue-item-status.completed {
+            color: var(--success);
+        }
+
+        .queue-item-remove {
+            background: none;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            font-size: 1rem;
+            margin-left: 0.5rem;
+            opacity: 0.5;
+            transition: var(--transition);
+        }
+
+        .queue-item-remove:hover {
+            opacity: 1;
+        }
+
+        .queue-empty {
+            padding: 1rem;
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Overlay untuk popup */
+        .popup-overlay-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1500;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .popup-overlay-bg.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsif */
+        @media (max-width: 768px) {
+            .premium-content-system {
+                padding: 1rem;
+            }
+            
+            .box-konten, .popup-container {
+                padding: 1.5rem;
+            }
+            
+            .download-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-options {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .contact-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .update-popup {
+                width: calc(100% - 40px);
+                bottom: 10px;
+                right: 10px;
+            }
+
+            .reset-info-popup {
+                width: 95%;
+            }
+
+            .profile-menu {
+                width: 280px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.5rem 1rem;
+            }
+
+            .profile-header-avatar {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+
+            .queue-container {
+                width: calc(100% - 40px);
+                left: 20px;
+                bottom: 80px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Profil Pengguna -->
+    <div class="user-profile" id="userProfileBtn">
+        <div class="profile-avatar" id="profileAvatar">U</div>
+        <div class="profile-name" id="profileName">Pengguna</div>
+        <div class="profile-menu" id="profileMenu">
+            <div class="profile-header">
+                <div class="profile-header-avatar" id="profileHeaderAvatar">U</div>
+                <div class="profile-header-info">
+                    <div class="profile-header-name" id="profileHeaderName">Nama Pengguna</div>
+                    <div class="profile-header-email" id="profileHeaderEmail">user@example.com</div>
+                    <div class="profile-tier" id="profileTierBadge">Subscriber</div>
+                </div>
+            </div>
+            <div class="profile-details">
+                <div class="profile-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="profile-item-text">
+                        <div class="profile-item-title">Status Akun</div>
+                        <div class="profile-item-subtitle" id="profileExpiry">Kadaluarsa: Tidak pernah</div>
+                    </div>
+                </div>
+                <div class="profile-item">
+                    <i class="fas fa-history"></i>
+                    <div class="profile-item-text">
+                        <div class="profile-item-title">Login Terakhir</div>
+                        <div class="profile-item-subtitle" id="profileLastLogin">Baru saja</div>
+                    </div>
+                </div>
+                <div class="profile-divider"></div>
+                <div class="profile-item" onclick="showResetInfoPopup()">
+                    <i class="fas fa-sync-alt"></i>
+                    <div class="profile-item-text">
+                        <div class="profile-item-title">Waktu Reset</div>
+                        <div class="profile-item-subtitle">Lihat jadwal reset download</div>
+                    </div>
+                </div>
+                <div class="profile-item" onclick="showTutorialPopup()">
+                    <i class="fas fa-question-circle"></i>
+                    <div class="profile-item-text">
+                        <div class="profile-item-title">Cara Dapat Kode</div>
+                        <div class="profile-item-subtitle">Tutorial mendapatkan kode admin</div>
+                    </div>
+                </div>
+                <div class="profile-divider"></div>
+                <div class="profile-item" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <div class="profile-item-text">
+                        <div class="profile-item-title">Keluar</div>
+                        <div class="profile-item-subtitle">Logout dari akun Anda</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Download Queue -->
+    <div class="queue-container" id="downloadQueue">
+        <div class="queue-header" onclick="toggleQueue()">
+            <div class="queue-title">
+                <i class="fas fa-download"></i>
+                <span>Antrian Download</span>
+            </div>
+            <div class="queue-count" id="queueCount">0</div>
+        </div>
+        <div class="queue-content" id="queueContent">
+            <div class="queue-empty">Tidak ada item dalam antrian</div>
+        </div>
+    </div>
+
+    <!-- Popup Update -->
+    <div class="update-popup" id="updatePopup">
+        <div class="update-header">
+            <span><i class="fas fa-bell"></i> Pembaruan Terbaru</span>
+            <button class="update-close" onclick="closeUpdatePopup()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="update-content">
+            <div class="update-item">
+                <div class="update-title">Sistem Antrian Download</div>
+                <div class="update-date"><i class="far fa-clock"></i> Hari ini, 21:30 WIB</div>
+                <div class="update-text">Menambahkan fitur antrian download untuk mengatur proses download secara berurutan.</div>
+            </div>
+            <div class="update-item">
+                <div class="update-title">Update Sistem</div>
+                <div class="update-date"><i class="far fa-clock"></i> Hari ini, 10:30 WIB</div>
+                <div class="update-text">Memperbaiki Bug Dan Menambah Pengguna. Dan Untuk Email Yang Expired Gak Di Tambahkan 😐.</div>
+            </div>
+            <div class="update-item">
+                <div class="update-title">Sistem Kode Admin Baru</div>
+                <div class="update-date"><i class="far fa-clock"></i> Kemarin, 15:45 WIB</div>
+                <div class="update-text">Semua download sekarang membutuhkan kode verifikasi admin untuk keamanan yang lebih baik.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Info Reset -->
+    <div class="reset-info-popup" id="resetInfoPopup">
+        <div class="reset-info-header">
+            <h3>Waktu Reset Download</h3>
+            <p>Jadwal reset berikutnya untuk setiap tier</p>
+        </div>
+        <div class="reset-info-content">
+            <div class="reset-tier">
+                <div class="reset-tier-icon subscriber">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="reset-tier-info">
+                    <div class="reset-tier-name">Subscriber</div>
+                    <div class="reset-tier-time">Reset harian pukul 00:00</div>
+                </div>
+                <div class="reset-tier-countdown" id="resetSubscriber">24:00:00</div>
+            </div>
+            <div class="reset-tier">
+                <div class="reset-tier-icon premium">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <div class="reset-tier-info">
+                    <div class="reset-tier-name">Premium</div>
+                    <div class="reset-tier-time">Setiap 12 jam (00:00 & 12:00)</div>
+                </div>
+                <div class="reset-tier-countdown" id="resetPremium">12:00:00</div>
+            </div>
+            <div class="reset-tier">
+                <div class="reset-tier-icon legend">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="reset-tier-info">
+                    <div class="reset-tier-name">Legend</div>
+                    <div class="reset-tier-time">Setiap 6 jam (00:00, 06:00, 12:00, 18:00)</div>
+                </div>
+                <div class="reset-tier-countdown" id="resetLegend">06:00:00</div>
+            </div>
+            <div class="reset-tier">
+                <div class="reset-tier-icon epic">
+                    <i class="fas fa-dragon"></i>
+                </div>
+                <div class="reset-tier-info">
+                    <div class="reset-tier-name">Epic</div>
+                    <div class="reset-tier-time">Segera hadir</div>
+                </div>
+                <div class="reset-tier-countdown">--:--:--</div>
+            </div>
+        </div>
+        <div class="reset-info-footer">
+            <button class="btn btn-primary" onclick="closeResetInfoPopup()">Mengerti</button>
+        </div>
+    </div>
+
+    <!-- Popup Tutorial -->
+    <div class="reset-info-popup" id="tutorialPopup">
+        <div class="reset-info-header">
+            <h3>Cara Mendapatkan Kode Admin</h3>
+            <p>Tutorial mendapatkan kode verifikasi untuk download</p>
+        </div>
+        <div class="reset-info-content">
+            <div class="tutorial-steps">
+                <div class="tutorial-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <div class="step-title">Hubungi Admin</div>
+                        <div class="step-description">
+                            Kirim pesan ke admin melalui WhatsApp atau Email dengan format berikut:
+                            <div class="code-example">
+                                Halo admin, saya ingin meminta kode verifikasi untuk tier <span>[subscriber/premium/legend]</span>.<br>
+                                Email saya: <span>[email_anda]</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <div class="step-title">Tunggu Balasan</div>
+                        <div class="step-description">
+                            Admin akan membalas pesan Anda dengan kode verifikasi yang bisa digunakan untuk download.
+                            Biasanya proses ini memakan waktu 1-5 menit tergantung antrian.
+                        </div>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <div class="step-title">Masukkan Kode</div>
+                        <div class="step-description">
+                            Setelah mendapatkan kode, masukkan ke dalam form verifikasi yang muncul saat Anda mencoba download.
+                            Kode hanya berlaku untuk 1x download.
+                        </div>
+                    </div>
+                </div>
+                <div class="tutorial-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <div class="step-title">Download Konten</div>
+                        <div class="step-description">
+                            Setelah kode diverifikasi, Anda akan diarahkan ke halaman download. Pastikan Anda menggunakan kode dengan benar dan tidak membagikannya ke orang lain.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="reset-info-footer">
+            <button class="btn btn-primary" onclick="closeTutorialPopup()">Mengerti</button>
+            <a href="https://wa.me/6281318608562?text=Hai%20Admin,%20saya%20ingin%20meminta%20kode%20verifikasi" class="btn btn-primary" style="margin-left: 10px;" target="_blank">
+                <i class="fab fa-whatsapp"></i> Hubungi Admin
+            </a>
+        </div>
+    </div>
+
+    <!-- Overlay Background -->
+    <div class="popup-overlay-bg" id="popupOverlayBg"></div>
+
+    <!-- Sistem Konten Premium -->
+    <div class="premium-content-system">
+        <!-- Overlay dan Form Login -->
+        <div class="overlay-box active" id="loginOverlay">
+            <div class="box-konten">
+                <button class="btn-close" onclick="tutupKonten()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div class="judul-box">AKSES PREMIUM</div>
+                <div class="deks-box">
+                    Akses konten premium dengan email terdaftar. Satu email per pengguna.
+                </div>
+                <div class="input-group">
+                    <label for="emailInput">Email Terdaftar</label>
+                    <input type="email" id="emailInput" placeholder="email@anda.com">
+                </div>
+                <button class="btn btn-primary" id="submitEmail">
+                    <i class="fas fa-lock-open"></i> Akses Konten
+                </button>
+            </div>
+        </div>
+
+        <!-- Konten Premium -->
+        <div class="konten-premium" id="kontenPremium">
+            <div class="content-header">
+                <h2>Konten Premium Eksklusif</h2>
+                <p>Buka kunci konten berkualitas tinggi yang hanya tersedia untuk anggota premium kami</p>
+            </div>
+            
+            <div class="download-grid">
+                <!-- Tier Subscriber -->
+                <div class="download-card subscriber">
+                    <img src="https://i.imgur.com/wKnH5rj.jpeg" class="card-image" alt="Konten Subscriber">
+                    <div class="card-header">
+                        <div class="card-icon subscriber">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="card-title">Subscriber</div>
+                    </div>
+                    <div class="card-description">
+                        Konten eksklusif untuk subscriber setia (1 download/hari)
+                    </div>
+                    <button class="btn-download subscriber" onclick="showDownloadOptions('subscriber', event)">
+                        <i class="fas fa-download"></i> Download Sekarang
+                    </button>
+                    <div class="verification-box" id="subscriber-verify">
+                        <input type="text" class="verification-input" placeholder="Masukkan kode admin" id="subscriber-code">
+                        <button class="btn btn-primary" onclick="verifyCode('subscriber')">Verifikasi</button>
+                    </div>
+                    <div class="limit-info">
+                        <span>Limit: <span class="limit-count" id="subscriber-count">1</span>/1</span>
+                        <span>Reset: <span class="reset-clock" id="subscriber-reset">24:00:00</span></span>
+                    </div>
+                </div>
+                
+                <!-- Tier Premium -->
+                <div class="download-card premium">
+                    <img src="https://i.imgur.com/RxtrqM6.jpeg" class="card-image" alt="Konten Premium">
+                    <div class="card-header">
+                        <div class="card-icon premium">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <div class="card-title">Premium 💎</div>
+                    </div>
+                    <div class="card-description">
+                        Konten premium berkualitas tinggi (3 download/12 jam)
+                    </div>
+                    <button class="btn-download premium" onclick="showDownloadOptions('premium', event)">
+                        <i class="fas fa-download"></i> Download Sekarang
+                    </button>
+                    <div class="verification-box" id="premium-verify">
+                        <input type="text" class="verification-input" placeholder="Masukkan kode admin" id="premium-code">
+                        <button class="btn btn-primary" onclick="verifyCode('premium')">Verifikasi</button>
+                    </div>
+                    <div class="limit-info">
+                        <span>Limit: <span class="limit-count" id="premium-count">3</span>/3</span>
+                        <span>Reset: <span class="reset-clock" id="premium-reset">12:00:00</span></span>
+                    </div>
+                </div>
+                
+                <!-- Tier Legend -->
+                <div class="download-card legend">
+                    <img src="https://i.imgur.com/9x09UBv.jpeg" class="card-image" alt="Konten Legend">
+                    <div class="card-header">
+                        <div class="card-icon legend">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="card-title">Legend 🦁</div>
+                    </div>
+                    <div class="card-description">
+                        Konten spesial untuk anggota top (1 download/6 jam)
+                    </div>
+                    <button class="btn-download legend" onclick="showDownloadOptions('legend', event)">
+                        <i class="fas fa-download"></i> Download Sekarang
+                    </button>
+                    <div class="verification-box" id="legend-verify">
+                        <input type="text" class="verification-input" placeholder="Masukkan kode admin" id="legend-code">
+                        <button class="btn btn-primary" onclick="verifyCode('legend')">Verifikasi</button>
+                    </div>
+                    <div class="limit-info">
+                        <span>Limit: <span class="limit-count" id="legend-count">1</span>/1</span>
+                        <span>Reset: <span class="reset-clock" id="legend-reset">06:00:00</span></span>
+                    </div>
+                </div>
+                
+                <!-- Tier Epic -->
+                <div class="download-card epic">
+                    <div class="dev-badge">DALAM PENGEMBANGAN</div>
+                    <img src="https://source.unsplash.com/random/600x400/?epic" class="card-image" alt="Konten Epic">
+                    <div class="card-header">
+                        <div class="card-icon epic">
+                            <i class="fas fa-dragon"></i>
+                        </div>
+                        <div class="card-title">Epic 🦏</div>
+                    </div>
+                    <div class="card-description">
+                        Segera hadir: Konten ultra-eksklusif (0 download tersedia)
+                    </div>
+                    <button class="btn-download epic" onclick="showComingSoon()" disabled>
+                        <i class="fas fa-tools"></i> Dalam Pengembangan
+                    </button>
+                    <div class="limit-info">
+                        <span>Limit: <span class="limit-count" id="epic-count">0</span>/0</span>
+                        <span>Reset: <span class="reset-clock" id="epic-reset">--:--:--</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tutorial Section -->
+            <div class="tutorial-section">
+                <div class="tutorial-header">
+                    <div class="tutorial-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <div class="tutorial-title">Tutorial Mendapatkan Kode Admin</div>
+                </div>
+                <div class="tutorial-steps">
+                    <div class="tutorial-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <div class="step-title">Klik Tombol Download</div>
+                            <div class="step-description">
+                                Pilih konten yang ingin didownload dan klik tombol "Download Sekarang".
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tutorial-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <div class="step-title">Form Verifikasi Muncul</div>
+                            <div class="step-description">
+                                Setelah mengklik tombol download, akan muncul form untuk memasukkan kode verifikasi admin.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tutorial-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <div class="step-title">Hubungi Admin</div>
+                            <div class="step-description">
+                                Kirim pesan ke admin melalui WhatsApp atau Email untuk meminta kode verifikasi.
+                                <div class="code-example">
+                                    Halo admin, saya ingin meminta kode verifikasi untuk tier <span>[subscriber/premium/legend]</span>.<br>
+                                    Email saya: <span>[email_anda]</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tutorial-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <div class="step-title">Masukkan Kode</div>
+                            <div class="step-description">
+                                Setelah mendapatkan kode dari admin, masukkan ke dalam form verifikasi dan klik tombol "Verifikasi".
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kontak Admin -->
+            <div class="admin-contact">
+                <h3>Butuh Bantuan?</h3>
+                <p>Hubungi tim dukungan kami untuk bantuan</p>
+                <div class="contact-options">
+                    <a href="https://wa.me/6281318608562?text=Hai%20Admin,%20saya%20butuh%20bantuan%20dengan%20akun%20saya" class="contact-btn whatsapp-btn" target="_blank">
+                        <i class="fab fa-whatsapp"></i> WhatsApp
+                    </a>
+                    <a href="mailto:felixcoter.help@gmail.com?subject=Bantuan%20Akun" class="contact-btn email-btn">
+                        <i class="fas fa-envelope"></i> Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Iklan -->
+    <div class="popup-overlay" id="adsPopupOverlay">
+        <div class="popup-container">
+            <button class="btn-close" id="adsCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="popup-header">
+                <div class="popup-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="popup-title">RESET LEBIH CEPAT</div>
+            </div>
+            <div class="popup-content">
+                <p>Tonton iklan singkat untuk mengurangi waktu reset Anda selama 1 jam</p>
+                <div class="ads-video-container">
+                    <div>Video Iklan</div>
+                    <div class="ads-timer" id="adsPopupTimer">00:30</div>
+                </div>
+            </div>
+            <button class="btn btn-primary" id="adsPopupBtn">
+                <i class="fas fa-play"></i> Tonton Iklan (30 detik)
+            </button>
+            <div class="ads-reward-message" id="adsRewardMessage">
+                <i class="fas fa-check-circle"></i> Waktu reset berhasil dikurangi 1 jam!
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Pilihan Download -->
+    <div class="popup-overlay" id="downloadOptionsOverlay">
+        <div class="popup-container">
+            <button class="btn-close" id="downloadOptionsCloseBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="popup-header">
+                <div class="popup-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <div class="popup-title">PILIHAN DOWNLOAD</div>
+            </div>
+            <div class="popup-content">
+                <p>Pilih metode download yang Anda inginkan:</p>
+                <div class="options-list">
+                    <button class="option-btn" id="downloadOption1">
+                        <img src="https://source.unsplash.com/random/100x100/?server" class="option-image" alt="Server Cepat">
+                        <div class="option-info">
+                            <div class="option-name">Server Kecepatan Tinggi</div>
+                            <div class="option-desc">Kecepatan download tercepat</div>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="option-btn" id="downloadOption2">
+                        <img src="https://source.unsplash.com/random/100x100/?secure" class="option-image" alt="Server Aman">
+                        <div class="option-info">
+                            <div class="option-name">Server Aman</div>
+                            <div class="option-desc">Stabil dan andal</div>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button class="option-btn" id="downloadOption3">
+                        <img src="https://source.unsplash.com/random/100x100/?mirror" class="option-image" alt="Server Mirror">
+                        <div class="option-info">
+                            <div class="option-name">Server Mirror</div>
+                            <div class="option-desc">Alternatif download</div>
+                        </div>
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="popup-footer">
+                <button class="btn btn-cancel" id="downloadOptionsCancelBtn">
+                    <i class="fas fa-times"></i> Batal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Data Pengguna
+        const emailUsers = {
+            // Pengguna Permanent (tidak pernah kadaluarsa)
+            "aanandre906@gmail.com": { 
+                tier: "legend", 
+                expired: "permanent", 
+                access: ["subscriber", "premium", "legend"],
+                permanent: true,
+                name: "Jall"
+            },
+            "biawaksalto67@gmail.com": { 
+                tier: "legend", 
+                expired: "permanent", 
+                access: ["subscriber", "premium", "legend"],
+                permanent: true,
+                name: "Dvan"
+            },
+          "arkasakhi6@gmail.com": { 
+                tier: "legend", 
+                expired: "permanent", 
+                access: ["subscriber", "premium", "legend"],
+                permanent: true,
+                name: "Arka"
+            },
+          "felixcoterhelp@gmail.com": { 
+                tier: "legend", 
+                expired: "permanent", 
+                access: ["subscriber", "premium", "legend"],
+                permanent: true,
+                name: "Felix"
+            },
+
+            // Subscriber Biasa
+            "lana190801@gmail.com": { 
+                tier: "subscriber", 
+                expired: "2025-04-05", 
+                access: ["subscriber"],
+                name: "Lana"
+            },
+            "neseudin84@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-16", 
+                access: ["subscriber", "premium"],
+                name: "Udin"
+            },
+            "mutaaliali7@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-05-02", 
+                access: ["subscriber", "premium"],
+                name: "Ali"
+            },
+
+            // Pengguna Premium
+            "sagob94@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-31", 
+                access: ["subscriber", "premium"],
+                name: "Sagob"
+            },
+            "vannjs26@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-22", 
+                access: ["subscriber", "premium"],
+                name: "Vann"
+            },
+          "tuanmudabijak1999@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-26", 
+                access: ["subscriber", "premium"],
+                name: "tuanmuda"
+            },
+          "nopal9068@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-22", 
+                access: ["subscriber", "premium"],
+                name: "Nopa"
+            },
+          "accounttwo31@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-14", 
+                access: ["subscriber", "premium"],
+                name: "Accou"
+            },
+          "ditowahyusteam@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-14", 
+                access: ["subscriber", "premium"],
+                name: "Dito"
+            },
+          "dominikusexcel097@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-14", 
+                access: ["subscriber", "premium"],
+                name: "Domini"
+            },
+          "zidanefauuzan128@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-14", 
+                access: ["subscriber", "premium"],
+                name: "Zidane"
+            },
+          "juwindarid@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-31", 
+                access: ["subscriber", "premium"],
+                name: "Juwin"
+            },
+          "vgk6074@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-14", 
+                access: ["subscriber", "premium"],
+                name: "Vgk"
+            },
+          "ajahhajahaha774@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-30", 
+                access: ["subscriber", "premium"],
+                name: "inter"
+            },
+          "junarealme0215@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-21", 
+                access: ["subscriber", "premium"],
+                name: "Juna"
+            },
+          "aaabbb062011@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-05-21", 
+                access: ["subscriber", "premium"],
+                name: "Abb062"
+            },
+          "korbanduit62@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-05-21", 
+                access: ["subscriber", "premium"],
+                name: "Korban"
+            },
+          "vgk6074@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-05-21", 
+                access: ["subscriber", "premium"],
+                name: "Vgk"
+            },
+          "vgk6074@gmail.com": { 
+                tier: "premium", 
+                expired: "2025-04-14", 
+                access: ["subscriber", "premium"],
+                name: "Vgk"
+            },
+
+            // Pengguna Legend
+            "hanzaja189@gmail.com": { 
+                tier: "legend", 
+                expired: "2025-05-06", 
+                access: ["subscriber", "premium", "legend"],
+                name: "Taikkucing678"
+            },
+          "rikodejak@gmail.com": { 
+                tier: "legend", 
+                expired: "2025-05-29", 
+                access: ["subscriber", "premium", "legend"],
+                name: "Riko"
+            },
+          "zidanefauuzan128@gmail.com": { 
+                tier: "legend", 
+                expired: "2025-05-06", 
+                access: ["subscriber", "premium", "legend"],
+                name: "Zidane2810"
+            },
+          "arselarsily@gmail.com": { 
+                tier: "legend", 
+                expired: "2025-05-09", 
+                access: ["subscriber", "premium", "legend"],
+                name: "arsel"
+            },
+         "newsaken5@gmail.com": { 
+                tier: "legend", 
+                expired: "2025-05-06", 
+                access: ["subscriber", "premium", "legend"],
+                name: "New"
+            }
+        };
+
+        // Kode verifikasi admin untuk setiap tier dan link
+        const adminCodes = {
+            subscriber: {
+                "SUB-2024": "https://ez4short.com/0aitzFbE",
+                "GOLD-MEMBER": "https://ez4short.com/1bcd2EfG"
+            },
+            premium: {
+                "PR3M-2025": "https://www.mediafire.com/file/koqk9zbp4tbsago/7taJS7ht1.mp4/file",
+                "D1AG-M0ND": "https://videy.co/v/?id=qBPTGrZQ1",
+                "BT07-98HG": "https://videy.co/v/?id=z26FSLX91"
+            },
+            legend: {
+                "L3G3ND-2025": "https://justpaste.it/legenda-7",
+                "L1ON-K1NG": "https://justpaste.it/legenda-8",
+                "CG8G-KV65": "https://justpaste.it/legenda-9"
+            },
+            epic: {} // Akan ditambahkan saat dikembangkan
+        };
+
+        const bannedEmails = [];
+        let currentUser = null;
+        let countdownInterval;
+        let adsTimer;
+        let remainingAdTime = 30;
+        let hasWatchedAd = false;
+
+        // Sistem Limit Download
+        const downloadLimits = {
+            subscriber: { 
+                count: 0, 
+                max: 1, 
+                period: "daily",
+                lastReset: null,
+                lastDownload: null,
+                resetHour: 24
+            },
+            premium: { 
+                count: 0, 
+                max: 3, 
+                period: "12hours",
+                lastReset: null,
+                lastDownload: null,
+                resetHour: 12
+            },
+            legend: { 
+                count: 0, 
+                max: 1, 
+                period: "6hours",
+                lastReset: null,
+                lastDownload: null,
+                resetHour: 6
+            },
+            epic: { 
+                count: 0, 
+                max: 0, 
+                period: "24hours",
+                lastReset: null,
+                resetHour: 24
+            }
+        };
+
+        // Data download yang dipilih
+        let currentDownloadData = {
+            type: '',
+            url: ''
+        };
+
+        // Download Queue System
+        let downloadQueue = {
+            items: [],
+            currentDownload: null,
+            isProcessing: false,
+            maxConcurrent: 1 // Jumlah download yang bisa berjalan bersamaan
+        };
+
+        // Fungsi untuk menambahkan item ke antrian download
+        function addToQueue(type, url, serverType) {
+            const queueItem = {
+                id: Date.now(),
+                type: type,
+                url: url,
+                serverType: serverType,
+                status: 'pending', // pending, downloading, completed
+                timestamp: new Date().toISOString()
+            };
+            
+            downloadQueue.items.push(queueItem);
+            updateQueueDisplay();
+            
+            // Jika tidak ada download yang sedang berjalan, mulai proses queue
+            if (!downloadQueue.isProcessing) {
+                processQueue();
+            }
+            
+            return queueItem.id;
+        }
+
+        // Fungsi untuk memproses antrian download
+        function processQueue() {
+            if (downloadQueue.items.length === 0 || downloadQueue.isProcessing) return;
+            
+            // Cari item pertama dengan status pending
+            const nextItem = downloadQueue.items.find(item => item.status === 'pending');
+            if (!nextItem) return;
+            
+            downloadQueue.isProcessing = true;
+            downloadQueue.currentDownload = nextItem.id;
+            nextItem.status = 'downloading';
+            updateQueueDisplay();
+            
+            // Simulasikan proses download
+            setTimeout(() => {
+                // Update status menjadi completed
+                const itemIndex = downloadQueue.items.findIndex(item => item.id === nextItem.id);
+                if (itemIndex !== -1) {
+                    downloadQueue.items[itemIndex].status = 'completed';
+                    
+                    // Tambah hitungan download
+                    const type = downloadQueue.items[itemIndex].type;
+                    downloadLimits[type].count++;
+                    downloadLimits[type].lastDownload = new Date().toISOString();
+                    saveDownloadLimits();
+                    updateAllCountdowns();
+                    
+                    // Redirect ke link download
+                    window.location.href = downloadQueue.items[itemIndex].url;
+                }
+                
+                // Hapus item yang sudah selesai setelah 3 detik
+                setTimeout(() => {
+                    downloadQueue.items = downloadQueue.items.filter(item => item.id !== nextItem.id);
+                    updateQueueDisplay();
+                    
+                    // Lanjutkan ke item berikutnya
+                    downloadQueue.isProcessing = false;
+                    downloadQueue.currentDownload = null;
+                    processQueue();
+                }, 3000);
+            }, 1000);
+        }
+
+        // Fungsi untuk memperbarui tampilan antrian
+        function updateQueueDisplay() {
+            const queueContent = document.getElementById('queueContent');
+            const queueCount = document.getElementById('queueCount');
+            
+            // Update count
+            queueCount.textContent = downloadQueue.items.length;
+            
+            // Update content
+            if (downloadQueue.items.length === 0) {
+                queueContent.innerHTML = '<div class="queue-empty">Tidak ada item dalam antrian</div>';
+                return;
+            }
+            
+            let queueHTML = '';
+            downloadQueue.items.forEach(item => {
+                const statusClass = item.status === 'completed' ? 'completed' : 
+                                  item.status === 'downloading' ? 'downloading' : 'pending';
+                
+                queueHTML += `
+                    <div class="queue-item">
+                        <div class="queue-item-icon ${item.type}">
+                            <i class="${getTierIcon(item.type)}"></i>
+                        </div>
+                        <div class="queue-item-info">
+                            <div class="queue-item-name">${item.type.charAt(0).toUpperCase() + item.type.slice(1)}</div>
+                            <div class="queue-item-status ${statusClass}">
+                                <i class="fas fa-${getStatusIcon(item.status)}"></i>
+                                ${getStatusText(item.status)}
+                            </div>
+                        </div>
+                        <button class="queue-item-remove" onclick="removeFromQueue(${item.id})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            
+            queueContent.innerHTML = queueHTML;
+            
+            // Tampilkan queue container jika ada item
+            document.getElementById('downloadQueue').classList.add('active');
+        }
+
+        // Fungsi untuk mendapatkan icon berdasarkan tier
+        function getTierIcon(type) {
+            switch(type) {
+                case 'subscriber': return 'fas fa-crown';
+                case 'premium': return 'fas fa-gem';
+                case 'legend': return 'fas fa-trophy';
+                case 'epic': return 'fas fa-dragon';
+                default: return 'fas fa-download';
+            }
+        }
+
+        // Fungsi untuk mendapatkan icon berdasarkan status
+        function getStatusIcon(status) {
+            switch(status) {
+                case 'completed': return 'check-circle';
+                case 'downloading': return 'spinner fa-pulse';
+                default: return 'clock';
+            }
+        }
+
+        // Fungsi untuk mendapatkan teks status
+        function getStatusText(status) {
+            switch(status) {
+                case 'completed': return 'Selesai';
+                case 'downloading': return 'Sedang download';
+                default: return 'Menunggu';
+            }
+        }
+
+        // Fungsi untuk menghapus item dari antrian
+        function removeFromQueue(id) {
+            downloadQueue.items = downloadQueue.items.filter(item => item.id !== id);
+            
+            // Jika item yang dihapus sedang diproses, hentikan dan lanjutkan ke berikutnya
+            if (downloadQueue.currentDownload === id) {
+                downloadQueue.isProcessing = false;
+                downloadQueue.currentDownload = null;
+                processQueue();
+            }
+            
+            updateQueueDisplay();
+        }
+
+        // Fungsi untuk toggle tampilan antrian
+        function toggleQueue() {
+            document.getElementById('downloadQueue').classList.toggle('active');
+        }
+
+        // Fungsi untuk verifikasi kode admin
+        function verifyCode(type) {
+            const codeInput = document.getElementById(`${type}-code`).value.trim();
+            const validCodes = adminCodes[type];
+            
+            if (validCodes[codeInput]) {
+                currentDownloadData.url = validCodes[codeInput];
+                processDownload("Server Terverifikasi");
+                
+                // Bersihkan input
+                document.getElementById(`${type}-code`).value = "";
+                document.getElementById(`${type}-verify`).style.display = "none";
+            } else {
+                Swal.fire('Kode Tidak Valid', 'Kode admin yang Anda masukkan salah', 'error');
+            }
+        }
+
+        // Fungsi untuk mendapatkan waktu reset berikutnya
+        function getNextResetTime(type) {
+            const now = new Date();
+            const resetTime = new Date();
+            const limitConfig = downloadLimits[type];
+            
+            switch(limitConfig.period) {
+                case "6hours":
+                    const currentHour = now.getHours();
+                    const nextResetHour = Math.ceil(currentHour / 6) * 6;
+                    resetTime.setHours(nextResetHour, 0, 0, 0);
+                    if (nextResetHour >= 24) {
+                        resetTime.setDate(resetTime.getDate() + 1);
+                        resetTime.setHours(0, 0, 0, 0);
+                    }
+                    break;
+                    
+                case "12hours":
+                    const currentHalfDay = now.getHours() >= 12 ? 12 : 0;
+                    const nextHalfDay = currentHalfDay === 0 ? 12 : 24;
+                    resetTime.setHours(nextHalfDay, 0, 0, 0);
+                    if (nextHalfDay === 24) {
+                        resetTime.setDate(resetTime.getDate() + 1);
+                        resetTime.setHours(0, 0, 0, 0);
+                    }
+                    break;
+                    
+                case "daily":
+                    resetTime.setDate(now.getDate() + 1);
+                    resetTime.setHours(0, 0, 0, 0);
+                    break;
+                    
+                default:
+                    resetTime.setDate(now.getDate() + 1);
+                    resetTime.setHours(0, 0, 0, 0);
+            }
+            
+            return resetTime;
+        }
+
+        // Fungsi untuk mengecek apakah sudah waktunya reset
+        function shouldResetLimits(type) {
+            const now = new Date();
+            const lastReset = downloadLimits[type].lastReset ? new Date(downloadLimits[type].lastReset) : null;
+            
+            if (!lastReset) return true;
+            
+            const diffHours = (now - lastReset) / (1000 * 60 * 60);
+            return diffHours >= downloadLimits[type].resetHour;
+        }
+
+        // Fungsi untuk mereset limit
+        function resetLimits(type) {
+            if (shouldResetLimits(type)) {
+                downloadLimits[type].count = 0;
+                downloadLimits[type].lastReset = new Date().toISOString();
+                saveDownloadLimits();
+                updateAllCountdowns();
+                return true;
+            }
+            return false;
+        }
+
+        // Fungsi untuk menampilkan info reset
+        function showResetTime(type) {
+            const nextReset = getNextResetTime(type);
+            const now = new Date();
+            const diffMs = nextReset - now;
+            
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+            const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+            
+            let periodInfo = "";
+            switch(downloadLimits[type].period) {
+                case "6hours":
+                    periodInfo = "Reset setiap 6 jam (00:00, 06:00, 12:00, 18:00)";
+                    break;
+                case "12hours":
+                    periodInfo = "Reset setiap 12 jam (00:00 dan 12:00)";
+                    break;
+                case "daily":
+                    periodInfo = "Reset harian pukul 00:00";
+                    break;
+                default:
+                    periodInfo = "Reset harian pukul 00:00";
+            }
+            
+            Swal.fire({
+                icon: 'info',
+                title: `RESET LIMIT ${type.toUpperCase()}`,
+                html: `Limit ${type} Anda akan direset pada:<br>
+                      <b>${nextReset.toLocaleString()}</b><br><br>
+                      Waktu tersisa: <b>${diffHours}j ${diffMinutes}m ${diffSeconds}d</b><br>
+                      (${periodInfo})`,
+                confirmButtonText: 'OK',
+                timer: 5000,
+                timerProgressBar: true
+            });
+        }
+
+        // Fungsi untuk menyimpan limit ke localStorage
+        function saveDownloadLimits() {
+            const dataToSave = {
+                limits: downloadLimits,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('downloadLimitsData', JSON.stringify(dataToSave));
+        }
+
+        // Fungsi untuk memuat limit dari localStorage
+        function loadDownloadLimits() {
+            const savedData = localStorage.getItem('downloadLimitsData');
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    const savedDate = new Date(parsedData.timestamp);
+                    const now = new Date();
+                    const oneDay = 24 * 60 * 60 * 1000;
+                    
+                    if ((now - savedDate) > (2 * oneDay)) {
+                        resetAllLimits();
+                        return;
+                    }
+                    
+                    for (const type in parsedData.limits) {
+                        if (downloadLimits[type]) {
+                            downloadLimits[type].count = parsedData.limits[type].count || 0;
+                            downloadLimits[type].lastReset = parsedData.limits[type].lastReset;
+                            downloadLimits[type].lastDownload = parsedData.limits[type].lastDownload;
+                            
+                            resetLimits(type);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error loading download limits:", e);
+                    resetAllLimits();
+                }
+            } else {
+                resetAllLimits();
+            }
+            updateAllCountdowns();
+        }
+
+        // Fungsi untuk mereset semua limit
+        function resetAllLimits() {
+            for (const type in downloadLimits) {
+                downloadLimits[type].count = 0;
+                downloadLimits[type].lastReset = new Date().toISOString();
+                downloadLimits[type].lastDownload = null;
+            }
+            saveDownloadLimits();
+        }
+
+        // Fungsi untuk update semua countdown
+        function updateAllCountdowns() {
+            if (!currentUser) return;
+            
+            const activeTiers = currentUser.access || [];
+            
+            activeTiers.forEach(type => {
+                const countElement = document.getElementById(`${type}-count`);
+                if (countElement) {
+                    const remaining = downloadLimits[type].max - downloadLimits[type].count;
+                    
+                    countElement.textContent = remaining;
+                    
+                    // Update class berdasarkan sisa count
+                    countElement.className = 'limit-count';
+                    if (remaining <= 0) {
+                        countElement.classList.add('zero');
+                    } else if (remaining <= Math.floor(downloadLimits[type].max / 2)) {
+                        countElement.classList.add('warning');
+                    }
+                }
+            });
+        }
+
+        // Fungsi untuk update jam reset
+        function updateResetClocks() {
+            for (const type in downloadLimits) {
+                const resetTime = getNextResetTime(type);
+                const now = new Date();
+                const diff = resetTime - now;
+                
+                if (diff <= 0) {
+                    document.getElementById(`${type}-reset`).textContent = "00:00:00";
+                    if (document.getElementById(`reset${type.charAt(0).toUpperCase() + type.slice(1)}`)) {
+                        document.getElementById(`reset${type.charAt(0).toUpperCase() + type.slice(1)}`).textContent = "00:00:00";
+                    }
+                    resetLimits(type);
+                    continue;
+                }
+                
+                const hours = Math.floor(diff / (1000 * 60 * 60)).toString().padStart(2, '0');
+                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+                const secs = Math.floor((diff % (1000 * 60)) / 1000).toString().padStart(2, '0');
+                
+                document.getElementById(`${type}-reset`).textContent = `${hours}:${mins}:${secs}`;
+                if (document.getElementById(`reset${type.charAt(0).toUpperCase() + type.slice(1)}`)) {
+                    document.getElementById(`reset${type.charAt(0).toUpperCase() + type.slice(1)}`).textContent = `${hours}:${mins}:${secs}`;
+                }
+            }
+        }
+
+        // Fungsi untuk memulai countdown timer
+        function startCountdownTimer() {
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                updateAllCountdowns();
+                updateResetClocks();
+            }, 1000);
+        }
+
+        // Fungsi untuk menampilkan popup iklan
+        function showAdsPopup() {
+            const popup = document.getElementById('adsPopupOverlay');
+            popup.classList.add('active');
+            
+            // Reset state iklan
+            document.getElementById('adsPopupTimer').textContent = '00:30';
+            document.getElementById('adsPopupBtn').textContent = 'Tonton Iklan (30 detik)';
+            document.getElementById('adsPopupBtn').disabled = false;
+            document.getElementById('adsRewardMessage').style.display = 'none';
+        }
+        
+        function closeAdsPopup() {
+            document.getElementById('adsPopupOverlay').classList.remove('active');
+            if (adsTimer) clearInterval(adsTimer);
+        }
+        
+        function initAdsPopup() {
+            const popupBtn = document.getElementById('adsPopupBtn');
+            const closeBtn = document.getElementById('adsCloseBtn');
+            const popupOverlay = document.getElementById('adsPopupOverlay');
+            
+            popupBtn.addEventListener('click', startAdsPopupCountdown);
+            closeBtn.addEventListener('click', closeAdsPopup);
+            popupOverlay.addEventListener('click', function(e) {
+                if (e.target === popupOverlay) {
+                    closeAdsPopup();
+                }
+            });
+        }
+        
+        function startAdsPopupCountdown() {
+            const popupBtn = document.getElementById('adsPopupBtn');
+            const popupTimer = document.getElementById('adsPopupTimer');
+            
+            popupBtn.disabled = true;
+            remainingAdTime = 30;
+            popupTimer.textContent = '00:30';
+            
+            adsTimer = setInterval(() => {
+                remainingAdTime--;
+                popupTimer.textContent = `00:${remainingAdTime.toString().padStart(2, '0')}`;
+                popupBtn.textContent = `Memutar (${remainingAdTime}d)`;
+                
+                if (remainingAdTime <= 0) {
+                    clearInterval(adsTimer);
+                    completeAdsViewing();
+                }
+            }, 1000);
+        }
+        
+        function completeAdsViewing() {
+            hasWatchedAd = true;
+            
+            // Kurangi waktu reset semua limit yang habis
+            for (const type in downloadLimits) {
+                if (downloadLimits[type].count >= downloadLimits[type].max) {
+                    const lastReset = new Date(downloadLimits[type].lastReset);
+                    lastReset.setHours(lastReset.getHours() - 1); // Kurangi 1 jam
+                    downloadLimits[type].lastReset = lastReset.toISOString();
+                }
+            }
+            
+            saveDownloadLimits();
+            updateAllCountdowns();
+            
+            // Tampilkan pesan reward
+            const rewardMessage = document.getElementById('adsRewardMessage');
+            rewardMessage.style.display = 'block';
+            
+            // Tutup popup otomatis setelah 3 detik
+            setTimeout(() => {
+                closeAdsPopup();
+            }, 3000);
+        }
+
+        // Fungsi untuk menampilkan pilihan download
+        function showDownloadOptions(type, event) {
+            event.preventDefault();
+            currentDownloadData.type = type;
+            
+            resetLimits(type);
+            
+            if (downloadLimits[type].count >= downloadLimits[type].max) {
+                showLimitWarning(type);
+                return;
+            }
+            
+            // Tampilkan kotak verifikasi
+            document.getElementById(`${type}-verify`).style.display = "block";
+        }
+
+        // Fungsi untuk menampilkan peringatan limit
+        function showLimitWarning(type) {
+            const nextReset = getNextResetTime(type);
+            const now = new Date();
+            const diffMs = nextReset - now;
+            const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+            const diffMinutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+            const diffSeconds = Math.floor((diffMs % (1000 * 60)) / 1000);
+            
+            let resetInfo = "";
+            switch(downloadLimits[type].period) {
+                case "6hours":
+                    resetInfo = "Reset setiap 6 jam";
+                    break;
+                case "12hours":
+                    resetInfo = "Reset setiap 12 jam";
+                    break;
+                case "daily":
+                    resetInfo = "Reset harian";
+                    break;
+                default:
+                    resetInfo = "Reset berikutnya";
+            }
+            
+            Swal.fire({
+                icon: 'warning',
+                title: 'LIMIT DOWNLOAD TERCAPAI',
+                html: `Anda telah mencapai limit download ${type} Anda.<br><br>
+                      ${resetInfo}<br>
+                      Waktu tersisa: <b>${diffHours}j ${diffMinutes}m ${diffSeconds}d</b>`,
+                confirmButtonText: 'Tonton Iklan',
+                showCancelButton: true,
+                cancelButtonText: 'Tutup',
+                timer: 10000,
+                timerProgressBar: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showAdsPopup();
+                }
+            });
+        }
+
+        // Fungsi untuk menutup pilihan download
+        function closeDownloadOptions() {
+            document.getElementById('downloadOptionsOverlay').classList.remove('active');
+        }
+
+        // Fungsi untuk memproses download
+        function processDownload(serverType) {
+            closeDownloadOptions();
+            
+            const type = currentDownloadData.type;
+            
+            // Tambahkan ke antrian download
+            const queueId = addToQueue(type, currentDownloadData.url, serverType);
+            
+            // Tampilkan notifikasi
+            Swal.fire({
+                icon: 'success',
+                title: 'DOWNLOAD DITAMBAHKAN KE ANTRIAN',
+                html: `File ${type} telah ditambahkan ke antrian download.<br><br>
+                      Server: <b>${serverType}</b><br>
+                      Posisi antrian: <b>${downloadQueue.items.length}</b>`,
+                timer: 3000,
+                timerProgressBar: true
+            });
+        }
+
+        // Fungsi untuk inisialisasi pilihan download
+        function initDownloadOptions() {
+            const closeBtn = document.getElementById('downloadOptionsCloseBtn');
+            const cancelBtn = document.getElementById('downloadOptionsCancelBtn');
+            const option1 = document.getElementById('downloadOption1');
+            const option2 = document.getElementById('downloadOption2');
+            const option3 = document.getElementById('downloadOption3');
+            const overlay = document.getElementById('downloadOptionsOverlay');
+            
+            closeBtn.addEventListener('click', closeDownloadOptions);
+            cancelBtn.addEventListener('click', closeDownloadOptions);
+            
+            option1.addEventListener('click', () => processDownload('Server Kecepatan Tinggi'));
+            option2.addEventListener('click', () => processDownload('Server Aman'));
+            option3.addEventListener('click', () => processDownload('Server Mirror'));
+            
+            overlay.addEventListener('click', function(e) {
+                if (e.target === overlay) {
+                    closeDownloadOptions();
+                }
+            });
+        }
+
+        // Fungsi untuk menampilkan coming soon untuk tier Epic
+        function showComingSoon() {
+            Swal.fire({
+                icon: 'info',
+                title: 'SEGERA HADIR',
+                html: 'Tier Epic 🦏 sedang dalam pengembangan.<br><br>Fitur akan mencakup:<br>- Konten ultra-eksklusif<br>- Dukungan prioritas<br>- Permintaan khusus',
+                confirmButtonText: 'Beritahu Saya',
+                showCancelButton: true,
+                cancelButtonText: 'Tutup'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.open('mailto:felixcoter.help@gmail.com?subject=Notifikasi%20Tier%20Epic', '_blank');
+                }
+            });
+        }
+
+        // Fungsi untuk mengirim notifikasi kadaluarsa
+        function sendExpirationNotification(email, expiryDate) {
+            console.log(`Mengirim pemberitahuan kadaluarsa ke ${email} untuk akun yang kadaluarsa pada ${expiryDate}`);
+            
+            const whatsappMsg = `Hai, akun premium Anda (${email}) telah kadaluarsa pada ${expiryDate}. Perbarui sekarang untuk melanjutkan akses.`;
+            const whatsappUrl = `https://wa.me/6281318608562?text=${encodeURIComponent(whatsappMsg)}`;
+            
+            const emailSubject = `Akun Premium Anda Telah Kadaluarsa (${email})`;
+            const emailBody = `Pengguna Terhormat,\n\nAkun premium Anda (${email}) kadaluarsa pada ${expiryDate}.\n\nPerbarui sekarang untuk mengembalikan akses:\nhttps://premiumcontent.com/renew\n\nButuh bantuan? Hubungi tim dukungan kami.`;
+            const emailUrl = `mailto:${email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            
+            setTimeout(() => {
+                console.log('Notifikasi dikirim via WhatsApp:', whatsappUrl);
+                console.log('Notifikasi dikirim via Email:', emailUrl);
+            }, 1000);
+        }
+
+        // Fungsi untuk update profil pengguna
+        function updateUserProfile(user) {
+            const email = Object.keys(emailUsers).find(key => emailUsers[key] === user) || 'user@example.com';
+            const firstLetter = user.name ? user.name.charAt(0).toUpperCase() : email.charAt(0).toUpperCase();
+            
+            // Tombol profil
+            document.getElementById('profileAvatar').textContent = firstLetter;
+            document.getElementById('profileName').textContent = user.name || email.split('@')[0];
+            
+            // Menu profil
+            document.getElementById('profileHeaderAvatar').textContent = firstLetter;
+            document.getElementById('profileHeaderName').textContent = user.name || email.split('@')[0];
+            document.getElementById('profileHeaderEmail').textContent = email;
+            
+            // Set badge tier
+            const tierBadge = document.getElementById('profileTierBadge');
+            tierBadge.textContent = user.tier.charAt(0).toUpperCase() + user.tier.slice(1);
+            tierBadge.className = 'profile-tier';
+            
+            if (user.tier === 'subscriber') tierBadge.classList.add('tier-subscriber');
+            else if (user.tier === 'premium') tierBadge.classList.add('tier-premium');
+            else if (user.tier === 'legend') tierBadge.classList.add('tier-legend');
+            else if (user.tier === 'epic') tierBadge.classList.add('tier-epic');
+            
+            // Set tanggal kadaluarsa
+            const expiryText = user.expired === 'permanent' ? 'Akun Permanent' : `Kadaluarsa: ${new Date(user.expired).toLocaleDateString()}`;
+            document.getElementById('profileExpiry').textContent = expiryText;
+            
+            // Set login terakhir
+            document.getElementById('profileLastLogin').textContent = `Login terakhir: ${new Date().toLocaleString()}`;
+        }
+
+        // Fungsi untuk menampilkan popup update
+        function showUpdatePopup() {
+            setTimeout(() => {
+                document.getElementById('updatePopup').classList.add('active');
+            }, 3000);
+        }
+
+        // Fungsi untuk menutup popup update
+        function closeUpdatePopup() {
+            document.getElementById('updatePopup').classList.remove('active');
+        }
+
+        // Fungsi untuk menampilkan popup info reset
+        function showResetInfoPopup() {
+            document.getElementById('popupOverlayBg').classList.add('active');
+            document.getElementById('resetInfoPopup').classList.add('active');
+            document.getElementById('profileMenu').classList.remove('active');
+        }
+
+        // Fungsi untuk menutup popup info reset
+        function closeResetInfoPopup() {
+            document.getElementById('popupOverlayBg').classList.remove('active');
+            document.getElementById('resetInfoPopup').classList.remove('active');
+        }
+
+        // Fungsi untuk menampilkan popup tutorial
+        function showTutorialPopup() {
+            document.getElementById('popupOverlayBg').classList.add('active');
+            document.getElementById('tutorialPopup').classList.add('active');
+            document.getElementById('profileMenu').classList.remove('active');
+        }
+
+        // Fungsi untuk menutup popup tutorial
+        function closeTutorialPopup() {
+            document.getElementById('popupOverlayBg').classList.remove('active');
+            document.getElementById('tutorialPopup').classList.remove('active');
+        }
+
+        // Fungsi untuk toggle menu profil
+        function toggleProfileMenu() {
+            document.getElementById('profileMenu').classList.toggle('active');
+        }
+
+        // Fungsi untuk logout
+        function logout() {
+            currentUser = null;
+            document.getElementById('kontenPremium').style.display = 'none';
+            document.getElementById('loginOverlay').classList.add('active');
+            document.getElementById('profileMenu').classList.remove('active');
+            
+            // Kosongkan antrian saat logout
+            downloadQueue.items = [];
+            downloadQueue.currentDownload = null;
+            downloadQueue.isProcessing = false;
+            updateQueueDisplay();
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil Logout',
+                text: 'Anda telah berhasil logout.',
+                timer: 2000,
+                timerProgressBar: true
+            });
+        }
+
+        // Fungsi untuk menangani login
+        document.getElementById("submitEmail").addEventListener("click", function() {
+            const email = document.getElementById("emailInput").value.trim().toLowerCase();
+            
+            if (!email) {
+                Swal.fire('Error', 'Harap masukkan email Anda', 'error');
+                return;
+            }
+            
+            if (bannedEmails.includes(email)) {
+                showBannedPopup(email);
+                return;
+            }
+            
+            if (!emailUsers[email]) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'EMAIL TIDAK TERDAFTAR',
+                    text: 'Email ini tidak memiliki akses premium.'
+                });
+                return;
+            }
+            
+            const user = emailUsers[email];
+            
+            // Cek jika akun permanent
+            if (user.permanent) {
+                document.querySelectorAll('.download-card').forEach(card => {
+                    const badge = document.createElement('div');
+                    badge.className = 'permanent-badge';
+                    badge.textContent = 'PERMANENT';
+                    card.appendChild(badge);
+                });
+            }
+            
+            // Cek kadaluarsa (lewati untuk pengguna permanent)
+            if (user.expired !== "permanent") {
+                const expiredDate = new Date(user.expired);
+                if (new Date() > expiredDate) {
+                    sendExpirationNotification(email, user.expired);
+                    
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'AKSES KADALUARSA',
+                        html: `Akses akun Anda kadaluarsa pada ${expiredDate.toLocaleDateString()}<br><br>
+                              Kami telah mengirim instruksi pembaruan ke email/WhatsApp Anda.`,
+                        confirmButtonText: 'Hubungi Dukungan',
+                        showCancelButton: true,
+                        cancelButtonText: 'Tutup'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.open('https://wa.me/6281318608562?text=Hai%20Admin,%20saya%20ingin%20memperbarui%20akun%20saya', '_blank');
+                        }
+                    });
+                    return;
+                }
+            }
+            
+            // Login berhasil
+            currentUser = user;
+            document.getElementById("kontenPremium").style.display = "block";
+            document.getElementById("loginOverlay").classList.remove('active');
+            
+            // Sembunyikan tier yang tidak bisa diakses
+            document.querySelectorAll('.download-card').forEach(card => {
+                const tierType = Array.from(card.classList).find(cls => 
+                    ['subscriber', 'premium', 'legend', 'epic'].includes(cls));
+                
+                if (!currentUser.access.includes(tierType)) {
+                    card.style.display = 'none';
+                } else {
+                    card.style.display = 'block';
+                }
+            });
+            
+            // Update profil pengguna
+            updateUserProfile(currentUser);
+            
+            loadDownloadLimits();
+            startCountdownTimer();
+            
+            // Tampilkan pesan selamat datang dan update
+            Swal.fire({
+                icon: 'success',
+                title: `SELAMAT DATANG, PENGGUNA ${currentUser.tier.toUpperCase()}!`,
+                html: `Anda memiliki akses ke konten ${currentUser.access.join(', ')}.<br><br>
+                      ${user.name ? `Akun: <b>${user.name}</b><br>` : ''}
+                      ${user.permanent ? '<span class="permanent-badge" style="display:inline-block;margin-top:10px;">AKUN PERMANENT</span>' : ''}`,
+                timer: 3000,
+                timerProgressBar: true
+            });
+            
+            showUpdatePopup();
+        });
+
+        // Fungsi untuk menampilkan popup banned
+        function showBannedPopup(email) {
+            Swal.fire({
+                icon: 'error',
+                title: 'AKUN DIBANNED',
+                html: `<p>Akun Anda (${email}) telah dibanned.</p>
+                      <button onclick="ajukanBanding('${email}')" class="swal2-confirm swal2-styled">
+                        Ajukan Banding
+                      </button>`,
+                showCancelButton: true,
+                cancelButtonText: 'Tutup'
+            });
+        }
+
+        // Fungsi untuk menangani banding banned
+        function ajukanBanding(email) {
+            const subject = "BANDING AKUN BANNED";
+            const body = `Kepada Admin,\n\nSaya pemilik akun ${email} dan ingin mengajukan banding karena:\n\n1. Alasan banding:\n2. Bukti pendukung:\n\nTerima kasih.`;
+            window.location.href = `mailto:admin@premiumcontent.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        }
+
+        // Fungsi untuk menutup konten
+        function tutupKonten() {
+            document.getElementById("loginOverlay").classList.remove('active');
+        }
+
+        // Inisialisasi saat halaman dimuat
+        window.addEventListener('load', function() {
+            initAdsPopup();
+            initDownloadOptions();
+            
+            // Inisialisasi tombol profil
+            document.getElementById('userProfileBtn').addEventListener('click', toggleProfileMenu);
+            
+            // Inisialisasi overlay popup
+            document.getElementById('popupOverlayBg').addEventListener('click', function() {
+                closeResetInfoPopup();
+                closeTutorialPopup();
+            });
+            
+            // Auto tampilkan popup login
+            setTimeout(() => {
+                document.getElementById("loginOverlay").classList.add('active');
+            }, 500);
+        });
+
+        // Cek reset setiap menit
+        setInterval(function() {
+            for (const type in downloadLimits) {
+                resetLimits(type);
+            }
+        }, 60 * 1000);
+    </script>
+</body>
+</html>
